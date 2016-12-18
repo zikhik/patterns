@@ -1,18 +1,21 @@
+// Singleton.h
 class Singleton
 {
-  public:
-    static Singleton& Instance()
-    {
-        // согласно стандарту, этот код  потокобезопасный
-        static Singleton s;
-        return s;
-    }
-
   private:
-    Singleton() { ... }  // конструктор недоступен
-    ~Singleton() { ... } // и деструктор
-
-    // необходимо также запретить копирование
-    Singleton(Singleton const&) = delete; // реализация не нужна
-    Singleton& operator= (Singleton const&) = delete;  // и тут
+    static Singleton * p_instance;
+    // Конструкторы и оператор присваивания недоступны клиентам
+    Singleton() {}
+    Singleton( const Singleton& );  
+    Singleton& operator=( Singleton& );
+  public:
+    static Singleton * getInstance() {
+        if(!p_instance)           
+            p_instance = new Singleton();
+        return p_instance;
+    }
 };
+  
+// Singleton.cpp
+#include "Singleton.h"
+  
+Singleton* Singleton::p_instance = 0;
